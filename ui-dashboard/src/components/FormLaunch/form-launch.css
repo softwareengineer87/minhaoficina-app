@@ -1,0 +1,72 @@
+.form-launch-container {
+  margin-top: 2rem;
+  transition: all .5s ease-in-out;
+}
+
+.form-launch-container.active {
+  display: block;
+}
+
+.form-launch.deactive {
+  display: none;
+}
+
+.form-launch .forms {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-launch .forms .input-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-launch .forms .input-form input {
+  background-color: var(--color-white);
+  padding: 1rem;
+}
+
+.form-launch .forms .input-form textarea {
+  background-color: var(--color-white);
+  padding: 1rem;
+  resize: none;
+}
+
+.form-launch .btn-save {
+  background-color: var(--color-black);
+  padding: 1rem 2rem;
+  color: var(--color-white);
+  cursor: pointer;
+}
+
+.form-launch .buttons-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.form-launch .buttons-form .cancell {
+  background-color: gray;
+  padding: 1rem 2rem;
+  color: var(--color-white);
+  cursor: pointer;
+}
+
+@media screen and (min-width: 48rem) {
+  .form-launch .forms .box-inputs {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .form-launch .forms .box-inputs .input-form {
+    flex: 1;
+  }
+
+  .form-launch .buttons-form {
+    flex-direction: row;
+    align-items: center;
+  }
+}

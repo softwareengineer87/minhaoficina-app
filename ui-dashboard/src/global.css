@@ -1,0 +1,38 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: none;
+  list-style: none;
+  text-decoration: none;
+  scroll-behavior: smooth;
+}
+
+button {
+  background: none;
+}
+
+:root {
+  --color-white: #F2F2F2;
+  --color-graylight: #D9D9D9;
+  --color-gray: #A6A6A6;
+  --color-blacklight: #595959;
+  --color-black: #404040;
+  --color-red: #BF0426;
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.6rem;
+  background-color: #FFFFFF;
+  color: var(--color-black);
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+}
+
+.container {
+  max-width: 130rem;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 2%;
+}
