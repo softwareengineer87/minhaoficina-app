@@ -1,4 +1,5 @@
 import { Business } from "../../domain/entities/Business";
+import { Launch } from "../../domain/entities/Launch";
 import { Service } from "../../domain/entities/Service";
 import { DatabaseConnection } from "../database/PgPromiseAdapter";
 
@@ -11,8 +12,7 @@ interface LaunchRepository {
     logo: string
   ): Promise<void>;
   getByEmail(email: string): Promise<Business | null>;
-  saveService(service: Service): Promise<void>;
-  serviceDetail(serviceId: string): Promise<Service>;
+  saveLaunch(launch: Launch): Promise<void>;
   businessDetail(businessId: string): Promise<Business>;
 }
 
@@ -45,11 +45,14 @@ class LaunchRepositoryDatabase implements LaunchRepository {
     return null;
   }
 
-  async saveService(service: Service): Promise<void> {
-    await this.connection.query(`INSERT INTO services 
-    (service_id, business_id, service_title, price) 
-    VALUES($1,$2,$3,$4)`, [service.serviceId, service.businessId,
-    service.serviceTitle, service.price]);
+  async saveLaunch(launch: Launch): Promise<void> {
+    await this.connection.query(`INSERT INTO launchs 
+    (launch_id, business_id, name, date, tel, cpf, model,
+    kilometer, plate, observation, photos) 
+    VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`, [launch.launchId,
+    launch.businessId, launch.name, launch.date, launch.tel,
+    launch.cpf, launch.model, launch.kilometer, launch.plate,
+    launch.observation, launch.photos]);
   }
 
   async serviceDetail(serviceId: string): Promise<Service> {

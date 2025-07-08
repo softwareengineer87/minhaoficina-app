@@ -1,5 +1,3 @@
-DROP TABLE IF EXISTS barbershops, customers, services, schedules CASCADE
-
 CREATE TABLE IF NOT EXISTS business (
   business_id TEXT PRIMARY KEY,
   name TEXT,
@@ -10,6 +8,7 @@ CREATE TABLE IF NOT EXISTS business (
 
 CREATE TABLE IF NOT EXISTS launchs (
   launch_id TEXT PRIMARY KEY,
+  business_id TEXT,
   name TEXT,
   tel TEXT,
   cpf TEXT,
@@ -17,7 +16,10 @@ CREATE TABLE IF NOT EXISTS launchs (
   kilometer INTEGER,
   plate TEXT,
   observation TEXT,
-  date DATE
+  date DATE,
+  photos TEXT[],
+
+  CONSTRAINT fk_business FOREIGN KEY(business_id) REFERENCES business(business_id)
 );
 
 CREATE TABLE IF NOT EXISTS parts (
@@ -28,5 +30,4 @@ CREATE TABLE IF NOT EXISTS parts (
   
   CONSTRAINT fk_launchs FOREIGN KEY(launch_id) REFERENCES launchs(launch_id)  
 );
-
 

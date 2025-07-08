@@ -1,51 +1,48 @@
-import { BusinessRepository } from "../../../../infra/repository/LaunchRepository";
-import { Business } from "../../../entities/Business";
+import { LaunchRepository } from "../../../../infra/repository/LaunchRepository";
+import { Launch } from "../../../entities/Launch";
 
 class CreateLaunch {
 
-  constructor(readonly businessRepository: BusinessRepository) { }
+  constructor(readonly launchRepository: LaunchRepository) { }
 
   async execute(input: Input): Promise<Output> {
-    const business = Business.create(
+    const launch = Launch.create(
+      input.businessId,
       input.name,
-      input.email,
-      input.password,
-      input.city,
-      input.district,
-      input.addressNumber,
-      input.description,
-      input.logo
-    );
-    const hashPass = await business.password.emcryptPassword(input.password);
-    const token = business.generateToken();
-    await this.businessRepository.saveBusiness(
-      business.businessId, business.name, business.getEmail(),
-      hashPass, business.city, business.district,
-      business.addressNumber, business.description, business.logo
+      input.date,
+      input.tel,
+      input.cpf,
+      input.model,
+      input.kilometer,
+      input.plate,
+      input.observation,
+      input.photos
     );
 
+    await this.launchRepository.saveLaunch(launch);
+
     return {
-      businessId: business.businessId,
-      token
+      launchId: launch.launchId
     }
   }
 
 }
 
 type Input = {
+  businessId: string;
   name: string;
-  email: string;
-  password: string;
-  city: string;
-  district: string;
-  addressNumber: number;
-  description: string;
-  logo: string;
+  date: string;
+  tel: string;
+  cpf: string;
+  model: string;
+  kilometer: number;
+  plate: string;
+  observation: string;
+  photos: string[];
 }
 
 type Output = {
-  businessId: string;
-  token: string;
+  launchId: string;
 }
 
 export { CreateLaunch }

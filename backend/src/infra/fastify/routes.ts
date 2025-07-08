@@ -1,29 +1,22 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { DatabaseConnection } from "../database/PgPromiseAdapter";
 import { Login } from "../../domain/application/usecases/dashboard/Login";
-import { CreateService } from "../../domain/application/usecases/dashboard/CreateService";
-import { UpdateService } from "../../domain/application/usecases/dashboard/UpdateService";
-import { DeleteService } from "../../domain/application/usecases/dashboard/DeleteService";
-import { GetAllServicesByBusiness } from "../../domain/application/usecases/dashboard/GetAllServicesByBusiness";
-import { ServiceDetail } from "../../domain/application/usecases/dashboard/ServiceDetail";
-import { AllServices } from "../../domain/application/usecases/dashboard/AllServices";
 import { GetBusiness } from "../../domain/application/usecases/dashboard/GetBusiness";
-import { BusinessDetail } from "../../domain/application/usecases/dashboard/BusinessDetail";
 import { UpdateBusiness } from "../../domain/application/usecases/dashboard/UpdateBusiness";
 import { LaunchRepositoryDatabase } from "../repository/LaunchRepository";
 import { Signup } from "../../domain/application/usecases/dashboard/Signup";
+import { BusinessDetail } from "../../domain/application/usecases/dashboard/BusinessDetail";
+import { CreateLaunch } from "../../domain/application/usecases/dashboard/CreateLaunch";
 
 function routes(fastify: FastifyInstance, connection: DatabaseConnection) {
 
   const launchRepository = new LaunchRepositoryDatabase(connection);
   const signup = new Signup(launchRepository);
   const businessLogin = new Login(launchRepository);
-  const updateService = new UpdateService(connection);
-  const deleteService = new DeleteService(connection);
-  const getServicesByBusinessId = new GetAllServicesByBusiness(connection);
-  const allServices = new AllServices(connection);
   const getBusiness = new GetBusiness(connection);
+  const businessDetail = new BusinessDetail(launchRepository);
   const updateBusiness = new UpdateBusiness(connection);
+  const createLaunch = new CreateLaunch(launchRepository);
 
   fastify.get('/', (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -140,21 +133,37 @@ function routes(fastify: FastifyInstance, connection: DatabaseConnection) {
   });
 
 
-  fastify.post('/business/services/:business_id', async (request: FastifyRequest, reply: FastifyReply) => {
+  fastify.post('/create-launch', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const { service_title, price } = request.body as {
-        service_title: string, price: number,
-      };
+      const { name, date, tel,
+        cpf, model, kilometer, plate, observation, photos } = request.body as {
+          name: string;
+          date: string;
+          tel: string;
+          cpf: string;
+          model: string;
+          kilometer: number;
+          plate: string;
+          observation: string;
+          photos: string[]
+        };
       const { business_id } = request.params as { business_id: string };
-      const inputService = {
+      const inputLaunch = {
         businessId: business_id,
-        serviceTitle: service_title,
-        price,
+        name,
+        date,
+        tel,
+        cpf,
+        model,
+        kilometer,
+        plate,
+        observation,
+        photos
       }
-      const { serviceId } = await createService.execute(inputService);
+      const { launchId } = await createLaunch.execute(inputLaunch);
       reply.code(201).send({
-        serviceId,
-        message: 'Serviço cadastrado com sucesso!'
+        launchId,
+        message: 'Lançamento cadastrado com sucesso!'
       });
     } catch (error) {
       console.log(`Erro no servidor: ${error}`);

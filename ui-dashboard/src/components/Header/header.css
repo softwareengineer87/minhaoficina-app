@@ -3,3 +3,10 @@
   padding: 1rem;
   margin-bottom: 2rem;
 }
+
+.header-container p {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: gray;
+}

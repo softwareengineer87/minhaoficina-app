@@ -1,12 +1,11 @@
-import { BusinessRepository } from "../../../../infra/repository/LaunchRepository";
-import { Business } from "../../../entities/Business";
+import { LaunchRepository } from "../../../../infra/repository/LaunchRepository";
 
 class BusinessDetail {
 
-  constructor(readonly businessRepository: BusinessRepository) { }
+  constructor(readonly launchRepository: LaunchRepository) { }
 
   async execute(businessId: string): Promise<Output> {
-    const business = await this.businessRepository.businessDetail(businessId);
+    const business = await this.launchRepository.businessDetail(businessId);
     return {
       businessId: business.businessId,
       name: business.name,

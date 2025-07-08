@@ -1,0 +1,81 @@
+import { Part } from "./Part";
+import { v4 as uuidv4 } from 'uuid';
+
+class Launch {
+
+  launchId: string;
+  businessId: string;
+  name: string;
+  date: string;
+  tel: string;
+  cpf: string;
+  model: string;
+  kilometer: number;
+  plate: string;
+  observation: string;
+  photos: string[];
+  parts: Part[];
+
+  constructor(
+    launchId: string,
+    businessId: string,
+    name: string,
+    date: string,
+    tel: string,
+    cpf: string,
+    model: string,
+    kilometer: number,
+    plate: string,
+    observation: string,
+    photos: string[]
+  ) {
+    this.launchId = launchId;
+    this.businessId = businessId;
+    this.name = name;
+    this.date = date;
+    this.tel = tel;
+    this.cpf = cpf;
+    this.model = model;
+    this.kilometer = kilometer;
+    this.plate = plate;
+    this.observation = observation;
+    this.photos = photos;
+    this.parts = [];
+  }
+
+  static create(
+    businessId: string,
+    name: string,
+    date: string,
+    tel: string,
+    cpf: string,
+    model: string,
+    kilometer: number,
+    plate: string,
+    observation: string,
+    photos: string[]
+  ) {
+    const launchId = uuidv4();
+    return new Launch(
+      launchId,
+      businessId,
+      name,
+      date,
+      tel,
+      cpf,
+      model,
+      kilometer,
+      plate,
+      observation,
+      photos
+    );
+  }
+
+  addPart(part: Part) {
+    this.parts.push(part);
+  }
+
+}
+
+export { Launch }
+

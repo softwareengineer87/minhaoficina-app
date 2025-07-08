@@ -12,6 +12,7 @@ app.register(cors, {
 });
 
 const connection = new PgPromiseAdapter();
+
 app.register(routes, connection);
 app.register(routesCustomer, connection);
 //pgPromiseAdapter.executeScript('../database/create.sql');
