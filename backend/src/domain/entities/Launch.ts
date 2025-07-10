@@ -13,7 +13,6 @@ class Launch {
   kilometer: number;
   plate: string;
   observation: string;
-  photos: string[];
   parts: Part[];
 
   constructor(
@@ -27,7 +26,6 @@ class Launch {
     kilometer: number,
     plate: string,
     observation: string,
-    photos: string[]
   ) {
     this.launchId = launchId;
     this.businessId = businessId;
@@ -39,7 +37,6 @@ class Launch {
     this.kilometer = kilometer;
     this.plate = plate;
     this.observation = observation;
-    this.photos = photos;
     this.parts = [];
   }
 
@@ -53,7 +50,6 @@ class Launch {
     kilometer: number,
     plate: string,
     observation: string,
-    photos: string[]
   ) {
     const launchId = uuidv4();
     return new Launch(
@@ -67,7 +63,6 @@ class Launch {
       kilometer,
       plate,
       observation,
-      photos
     );
   }
 

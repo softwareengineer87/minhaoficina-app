@@ -14,6 +14,7 @@ interface LaunchRepository {
   getByEmail(email: string): Promise<Business | null>;
   saveLaunch(launch: Launch): Promise<void>;
   businessDetail(businessId: string): Promise<Business>;
+  savePhoto(photoId: string, launchId: string, url: string): Promise<void>;
 }
 
 class LaunchRepositoryDatabase implements LaunchRepository {
@@ -48,11 +49,11 @@ class LaunchRepositoryDatabase implements LaunchRepository {
   async saveLaunch(launch: Launch): Promise<void> {
     await this.connection.query(`INSERT INTO launchs 
     (launch_id, business_id, name, date, tel, cpf, model,
-    kilometer, plate, observation, photos) 
-    VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`, [launch.launchId,
+    kilometer, plate, observation) 
+    VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`, [launch.launchId,
     launch.businessId, launch.name, launch.date, launch.tel,
     launch.cpf, launch.model, launch.kilometer, launch.plate,
-    launch.observation, launch.photos]);
+    launch.observation]);
   }
 
   async serviceDetail(serviceId: string): Promise<Service> {
@@ -71,6 +72,11 @@ class LaunchRepositoryDatabase implements LaunchRepository {
       businessData.email, businessData.password, businessData.city,
       businessData.district, businessData.address_number,
       businessData.description, businessData.logo);
+  }
+
+  async savePhoto(photoId: string, launchId: string, url: string): Promise<void> {
+    await this.connection.query(`INSERT INTO photos
+    (photo_id, launch_id, url) VALUES ($1, $2, $3)`, [photoId, launchId, url]);
   }
 
 }

@@ -1,0 +1,27 @@
+.statistic-container .statistic {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1rem;
+  background-color: whitesmoke;
+  border-radius: .5rem;
+}
+
+.statistic-container .statistic .box-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statistic .box-total .icon-stat {
+  color: var(--color-red);
+}
+
+.statistic .box-total h3 {
+  color: var(--color-red);
+  font-size: 2.5rem;
+}
+
+.statistic p {
+  color: var(--color-gray);
+}

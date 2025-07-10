@@ -133,10 +133,10 @@ function routes(fastify: FastifyInstance, connection: DatabaseConnection) {
   });
 
 
-  fastify.post('/create-launch', async (request: FastifyRequest, reply: FastifyReply) => {
+  fastify.post('/create-launch/:business_id', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { name, date, tel,
-        cpf, model, kilometer, plate, observation, photos } = request.body as {
+        cpf, model, kilometer, plate, observation } = request.body as {
           name: string;
           date: string;
           tel: string;
@@ -145,7 +145,6 @@ function routes(fastify: FastifyInstance, connection: DatabaseConnection) {
           kilometer: number;
           plate: string;
           observation: string;
-          photos: string[]
         };
       const { business_id } = request.params as { business_id: string };
       const inputLaunch = {
@@ -158,7 +157,6 @@ function routes(fastify: FastifyInstance, connection: DatabaseConnection) {
         kilometer,
         plate,
         observation,
-        photos
       }
       const { launchId } = await createLaunch.execute(inputLaunch);
       reply.code(201).send({

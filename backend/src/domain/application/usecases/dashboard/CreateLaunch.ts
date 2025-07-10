@@ -16,7 +16,6 @@ class CreateLaunch {
       input.kilometer,
       input.plate,
       input.observation,
-      input.photos
     );
 
     await this.launchRepository.saveLaunch(launch);
@@ -38,7 +37,6 @@ type Input = {
   kilometer: number;
   plate: string;
   observation: string;
-  photos: string[];
 }
 
 type Output = {

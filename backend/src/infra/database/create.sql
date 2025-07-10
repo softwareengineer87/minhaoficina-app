@@ -17,7 +17,6 @@ CREATE TABLE IF NOT EXISTS launchs (
   plate TEXT,
   observation TEXT,
   date DATE,
-  photos TEXT[],
 
   CONSTRAINT fk_business FOREIGN KEY(business_id) REFERENCES business(business_id)
 );
@@ -30,4 +29,13 @@ CREATE TABLE IF NOT EXISTS parts (
   
   CONSTRAINT fk_launchs FOREIGN KEY(launch_id) REFERENCES launchs(launch_id)  
 );
+
+CREATE TABLE IF NOT EXISTS photos (
+  photo_id TEXT PRIMARY KEY,
+  launch_id TEXT,
+  url TEXT,
+  
+  CONSTRAINT fk_launchs FOREIGN KEY(launch_id) REFERENCES launchs(launch_id)  
+);
+
 
