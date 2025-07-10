@@ -7,6 +7,8 @@ import { LaunchRepositoryDatabase } from "../repository/LaunchRepository";
 import { Signup } from "../../domain/application/usecases/dashboard/Signup";
 import { BusinessDetail } from "../../domain/application/usecases/dashboard/BusinessDetail";
 import { CreateLaunch } from "../../domain/application/usecases/dashboard/CreateLaunch";
+import { GetAllLaunchs } from "../../domain/application/usecases/dashboard/GetAllLaunchs";
+import { GetAllPhotos } from "../../domain/application/usecases/dashboard/GetAllPhotos";
 
 function routes(fastify: FastifyInstance, connection: DatabaseConnection) {
 
@@ -17,6 +19,8 @@ function routes(fastify: FastifyInstance, connection: DatabaseConnection) {
   const businessDetail = new BusinessDetail(launchRepository);
   const updateBusiness = new UpdateBusiness(connection);
   const createLaunch = new CreateLaunch(launchRepository);
+  const getLaunchs = new GetAllLaunchs(connection);
+  const getPhotos = new GetAllPhotos(connection);
 
   fastify.get('/', (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -163,6 +167,28 @@ function routes(fastify: FastifyInstance, connection: DatabaseConnection) {
         launchId,
         message: 'Lançamento cadastrado com sucesso!'
       });
+    } catch (error) {
+      console.log(`Erro no servidor: ${error}`);
+      reply.code(500).send(error);
+    }
+  });
+
+  fastify.get('/launchs/:business_id', async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const { business_id } = request.params as { business_id: string };
+      const launchs = await getLaunchs.execute(business_id);
+      reply.code(200).send(launchs);
+    } catch (error) {
+      console.log(`Erro no servidor: ${error}`);
+      reply.code(500).send(error);
+    }
+  });
+
+  fastify.get('/photos/:launch_id', async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const { launch_id } = request.params as { launch_id: string };
+      const photos = await getPhotos.execute(launch_id);
+      reply.code(200).send(photos);
     } catch (error) {
       console.log(`Erro no servidor: ${error}`);
       reply.code(500).send(error);
