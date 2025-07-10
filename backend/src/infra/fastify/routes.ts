@@ -9,6 +9,7 @@ import { BusinessDetail } from "../../domain/application/usecases/dashboard/Busi
 import { CreateLaunch } from "../../domain/application/usecases/dashboard/CreateLaunch";
 import { GetAllLaunchs } from "../../domain/application/usecases/dashboard/GetAllLaunchs";
 import { GetAllPhotos } from "../../domain/application/usecases/dashboard/GetAllPhotos";
+import { CreatePart } from "../../domain/application/usecases/dashboard/CreatePart";
 
 function routes(fastify: FastifyInstance, connection: DatabaseConnection) {
 
@@ -21,6 +22,7 @@ function routes(fastify: FastifyInstance, connection: DatabaseConnection) {
   const createLaunch = new CreateLaunch(launchRepository);
   const getLaunchs = new GetAllLaunchs(connection);
   const getPhotos = new GetAllPhotos(connection);
+  const createPart = new CreatePart(launchRepository);
 
   fastify.get('/', (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -189,6 +191,29 @@ function routes(fastify: FastifyInstance, connection: DatabaseConnection) {
       const { launch_id } = request.params as { launch_id: string };
       const photos = await getPhotos.execute(launch_id);
       reply.code(200).send(photos);
+    } catch (error) {
+      console.log(`Erro no servidor: ${error}`);
+      reply.code(500).send(error);
+    }
+  });
+
+  fastify.post('/create-part/:launch_id', async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const { name, price } = request.body as {
+        name: string;
+        price: number;
+      };
+      const { launch_id } = request.params as { launch_id: string };
+      const inputPart = {
+        launchId: launch_id,
+        name,
+        price
+      }
+      const { partId } = await createPart.execute(inputPart);
+      reply.code(201).send({
+        partId,
+        message: 'peça cadastrada com sucesso!'
+      });
     } catch (error) {
       console.log(`Erro no servidor: ${error}`);
       reply.code(500).send(error);

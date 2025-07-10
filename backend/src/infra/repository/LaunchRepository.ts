@@ -1,5 +1,6 @@
 import { Business } from "../../domain/entities/Business";
 import { Launch } from "../../domain/entities/Launch";
+import { Part } from "../../domain/entities/Part";
 import { Service } from "../../domain/entities/Service";
 import { DatabaseConnection } from "../database/PgPromiseAdapter";
 
@@ -15,6 +16,7 @@ interface LaunchRepository {
   saveLaunch(launch: Launch): Promise<void>;
   businessDetail(businessId: string): Promise<Business>;
   savePhoto(photoId: string, launchId: string, url: string): Promise<void>;
+  savePart(part: Part): Promise<void>;
 }
 
 class LaunchRepositoryDatabase implements LaunchRepository {
@@ -77,6 +79,13 @@ class LaunchRepositoryDatabase implements LaunchRepository {
   async savePhoto(photoId: string, launchId: string, url: string): Promise<void> {
     await this.connection.query(`INSERT INTO photos
     (photo_id, launch_id, url) VALUES ($1, $2, $3)`, [photoId, launchId, url]);
+  }
+
+  async savePart(part: Part): Promise<void> {
+    await this.connection.query(`INSERT INTO parts 
+    (part_id, launch_id, name, price) 
+    VALUES ($1, $2, $3, $4)`, [part.partId, part.launchId,
+    part.name, part.price]);
   }
 
 }
