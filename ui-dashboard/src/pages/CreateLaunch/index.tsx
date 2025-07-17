@@ -6,7 +6,6 @@ import type Launch from '../../models/Launch';
 function CreateLaunch() {
 
   const [launch, setLaunch] = useState<Launch>({} as Launch);
-  console.log(launch);
 
   return (
     <section className='launch-container'>

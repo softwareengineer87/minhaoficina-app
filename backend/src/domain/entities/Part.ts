@@ -12,6 +12,15 @@ class Part {
     name: string,
     price: number
   ) {
+    if (launchId === '' || launchId === undefined) {
+      throw new Error('Cadastre o lancamento primeiro.');
+    }
+    if (name === '') {
+      throw new Error('O nome e origatorio.');
+    }
+    if (String(price) === '') {
+      throw new Error('O preco e obrigatorio.');
+    }
     this.partId = partId;
     this.launchId = launchId;
     this.name = name;

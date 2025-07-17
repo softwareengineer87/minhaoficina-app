@@ -1,5 +1,4 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { DatabaseConnection } from "../database/PgPromiseAdapter";
 import { Login } from "../../domain/application/usecases/dashboard/Login";
 import { GetBusiness } from "../../domain/application/usecases/dashboard/GetBusiness";
 import { UpdateBusiness } from "../../domain/application/usecases/dashboard/UpdateBusiness";
@@ -11,7 +10,7 @@ import { GetAllLaunchs } from "../../domain/application/usecases/dashboard/GetAl
 import { GetAllPhotos } from "../../domain/application/usecases/dashboard/GetAllPhotos";
 import { CreatePart } from "../../domain/application/usecases/dashboard/CreatePart";
 
-function routes(fastify: FastifyInstance, connection: DatabaseConnection) {
+async function routes(fastify: FastifyInstance, connection: any) {
 
   const launchRepository = new LaunchRepositoryDatabase(connection);
   const signup = new Signup(launchRepository);

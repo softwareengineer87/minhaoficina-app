@@ -27,6 +27,18 @@ class Launch {
     plate: string,
     observation: string,
   ) {
+    if (name === '' || name === undefined || name === null) {
+      throw new Error('O nome é origatório.');
+    }
+    if (tel === '' || tel === undefined || tel === null) {
+      throw new Error('O telefone é origatório.');
+    }
+    if (cpf === '' || cpf === undefined || cpf === null) {
+      throw new Error('O cpf é origatório.');
+    }
+    if (model === '' || model === undefined || model === null) {
+      throw new Error('O modelo é origatório.');
+    }
     this.launchId = launchId;
     this.businessId = businessId;
     this.name = name;

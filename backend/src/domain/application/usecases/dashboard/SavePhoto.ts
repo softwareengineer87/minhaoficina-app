@@ -1,4 +1,3 @@
-import { cloudinary } from "../../../../infra/cloudnaryConfig";
 import { LaunchRepository } from "../../../../infra/repository/LaunchRepository";
 import { MyFile } from "../../../../utils/utils";
 import { Photo } from "../../../entities/Photo";

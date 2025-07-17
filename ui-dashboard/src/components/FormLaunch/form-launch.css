@@ -3,6 +3,13 @@
   transition: all .5s ease-in-out;
 }
 
+.form-launch-container .message-photo {
+  margin-top: 2rem;
+  background-color: var(--color-white);
+  padding: 1rem;
+  color: var(--color-red);
+}
+
 .form-launch-container.active {
   display: block;
 }
@@ -34,11 +41,17 @@
   resize: none;
 }
 
-.form-launch .btn-save {
+.form-launch .btn-save,
+.form-launch .btn-photo {
   background-color: var(--color-black);
   padding: 1rem 2rem;
   color: var(--color-white);
   cursor: pointer;
+}
+
+.form-launch .btn-photo {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .form-launch .buttons-form {
@@ -46,6 +59,7 @@
   flex-direction: column;
   gap: 2rem;
   margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .form-launch .buttons-form .cancell {

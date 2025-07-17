@@ -10,6 +10,8 @@ import { SavePhoto } from '../../domain/application/usecases/dashboard/SavePhoto
 import { cloudinary } from '../cloudnaryConfig';
 import { MyFile } from '../../utils/utils';
 import dotenv from 'dotenv';
+import fastifyPostgres from '@fastify/postgres';
+import pgp from 'pg-promise';
 dotenv.config();
 
 const app = Fastify();
@@ -19,11 +21,13 @@ app.register(cors, {
   methods: ['PUT', 'GET', 'POST', 'DELETE', 'OPTIONS']
 });
 
-const connection = new PgPromiseAdapter();
-
-app.register(routes, connection);
-app.register(routesCustomer, connection);
 app.register(fastifyMultipart);
+
+//const connection = app.pg.connect();
+const connection = new PgPromiseAdapter();
+app.register(routes, connection);
+
+//app.register(routesCustomer);
 //pgPromiseAdapter.executeScript('../database/create.sql');
 
 const launchRepository = new LaunchRepositoryDatabase(connection);
@@ -33,7 +37,6 @@ app.post('/photos/:launch_id', { preHandler: multerConfig.single('file') },
   async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const photo = request.file as MyFile;
-      console.log(photo);
       const { launch_id } = request.params as { launch_id: string };
       const result = await cloudinary.uploader.upload(photo.path, { folder: 'minha-oficina' }, async (err, result) => {
         if (err) {
@@ -50,11 +53,12 @@ app.post('/photos/:launch_id', { preHandler: multerConfig.single('file') },
       reply.code(500).send(error);
     }
   });
+
 app.listen({ port: 3333 }, (err, address) => {
   if (err) {
     app.log.error(err);
     process.exit(1);
   }
-  console.log(`server running on ${address}`);
+  console.log(`server running on http://localhost:${process.env.PORT}`);
 });
 
