@@ -9,6 +9,7 @@ import { CreateLaunch } from "../../domain/application/usecases/dashboard/Create
 import { GetAllLaunchs } from "../../domain/application/usecases/dashboard/GetAllLaunchs";
 import { GetAllPhotos } from "../../domain/application/usecases/dashboard/GetAllPhotos";
 import { CreatePart } from "../../domain/application/usecases/dashboard/CreatePart";
+import { GetAllParts } from "../../domain/application/usecases/dashboard/GetAllParts";
 
 async function routes(fastify: FastifyInstance, connection: any) {
 
@@ -22,6 +23,7 @@ async function routes(fastify: FastifyInstance, connection: any) {
   const getLaunchs = new GetAllLaunchs(connection);
   const getPhotos = new GetAllPhotos(connection);
   const createPart = new CreatePart(launchRepository);
+  const getParts = new GetAllParts(connection);
 
   fastify.get('/', (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -190,6 +192,17 @@ async function routes(fastify: FastifyInstance, connection: any) {
       const { launch_id } = request.params as { launch_id: string };
       const photos = await getPhotos.execute(launch_id);
       reply.code(200).send(photos);
+    } catch (error) {
+      console.log(`Erro no servidor: ${error}`);
+      reply.code(500).send(error);
+    }
+  });
+
+  fastify.get('/parts/:launch_id', async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const { launch_id } = request.params as { launch_id: string };
+      const parts = await getParts.execute(launch_id);
+      reply.code(200).send(parts);
     } catch (error) {
       console.log(`Erro no servidor: ${error}`);
       reply.code(500).send(error);

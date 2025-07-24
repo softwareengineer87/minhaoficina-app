@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type Launch from '../../models/Launch';
 import './form-launch.css';
 import { useNavigate } from 'react-router-dom';
@@ -26,6 +26,8 @@ function Formlaunch({
     saveLaunch,
     savePhoto,
     savePart,
+    loadParts,
+    partsList,
     dataPhoto,
     idLaunch,
     message,
@@ -71,7 +73,12 @@ function Formlaunch({
     }
     timeMessage();
   }
-  console.log(dataPhoto);
+
+  useEffect(() => {
+    loadParts(launch.launchId);
+  }, []);
+
+  console.log(partsList);
 
   return (
     <section className={`
@@ -203,7 +210,7 @@ function Formlaunch({
               <label htmlFor='name'>Nome da peça</label>
               <input
                 onChange={(e) => setPartName(e.target.value)}
-                value={partPrice}
+                value={partName}
                 type='text'
                 id='name'
                 placeholder='Nome da peça'
@@ -213,7 +220,7 @@ function Formlaunch({
               <label htmlFor='price'>Preço</label>
               <input
                 onChange={(e) => setPartPrice(e.target.value)}
-                value={partName}
+                value={partPrice}
                 type='numer'
                 id='price'
                 placeholder='Preço'

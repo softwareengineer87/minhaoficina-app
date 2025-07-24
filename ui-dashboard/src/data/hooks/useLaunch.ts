@@ -100,10 +100,21 @@ function useLaunch() {
     }
   }
 
+  async function loadParts(launchId: string) {
+    try {
+      const response = await fetch(`${baseURL}/parts/${launchId}`);
+      const data = await response.json();
+      setPartsList(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return {
     launch,
     saveLaunch,
     setLaunch,
+    loadParts,
     partsList,
     setPartsList,
     savePart,
