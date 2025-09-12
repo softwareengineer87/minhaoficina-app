@@ -10,6 +10,7 @@ import { GetAllLaunchs } from "../../domain/application/usecases/dashboard/GetAl
 import { GetAllPhotos } from "../../domain/application/usecases/dashboard/GetAllPhotos";
 import { CreatePart } from "../../domain/application/usecases/dashboard/CreatePart";
 import { GetAllParts } from "../../domain/application/usecases/dashboard/GetAllParts";
+import { GetLogos } from "../../domain/application/usecases/dashboard/GetLogos";
 
 async function routes(fastify: FastifyInstance, connection: any) {
 
@@ -24,6 +25,7 @@ async function routes(fastify: FastifyInstance, connection: any) {
   const getPhotos = new GetAllPhotos(connection);
   const createPart = new CreatePart(launchRepository);
   const getParts = new GetAllParts(connection);
+  const getLogos = new GetLogos(connection);
 
   fastify.get('/', (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -36,15 +38,14 @@ async function routes(fastify: FastifyInstance, connection: any) {
 
   fastify.post('/business', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const { name, email, password, logo
+      const { name, email, password
       } = request.body as {
-        name: string, email: string, password: string, logo: string
+        name: string, email: string, password: string
       };
       const inputBusiness = {
         name,
         email,
-        password,
-        logo
+        password
       }
       const { businessId } = await signup.execute(inputBusiness);
 
@@ -100,33 +101,17 @@ async function routes(fastify: FastifyInstance, connection: any) {
         name,
         email,
         password,
-        city,
-        district,
-        address_number,
-        description,
-        logo
       } = request.body as {
         name: string,
         email: string,
         password: string,
-        city: string,
-        district: string,
-        address_number: number,
-        description: string,
-        logo: string
       }
       const { business_id } = request.params as { business_id: string };
-      const addressNumber = address_number;
       const { businessId } = await updateBusiness.execute(
         business_id,
         name,
         email,
-        password,
-        city,
-        district,
-        addressNumber,
-        description,
-        logo
+        password
       );
 
       reply.code(200).send({
@@ -192,6 +177,17 @@ async function routes(fastify: FastifyInstance, connection: any) {
       const { launch_id } = request.params as { launch_id: string };
       const photos = await getPhotos.execute(launch_id);
       reply.code(200).send(photos);
+    } catch (error) {
+      console.log(`Erro no servidor: ${error}`);
+      reply.code(500).send(error);
+    }
+  });
+
+  fastify.get('/logos/:business_id', async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const { business_id } = request.params as { business_id: string };
+      const logos = await getLogos.execute(business_id);
+      reply.code(200).send(logos);
     } catch (error) {
       console.log(`Erro no servidor: ${error}`);
       reply.code(500).send(error);

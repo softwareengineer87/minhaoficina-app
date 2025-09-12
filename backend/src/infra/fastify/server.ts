@@ -10,14 +10,15 @@ import { SavePhoto } from '../../domain/application/usecases/dashboard/SavePhoto
 import { cloudinary } from '../cloudnaryConfig';
 import { MyFile } from '../../utils/utils';
 import dotenv from 'dotenv';
-import fastifyPostgres from '@fastify/postgres';
 import pgp from 'pg-promise';
+import createSql from '../database/create.sql';
+import { SaveLogo } from '../../domain/application/usecases/dashboard/SaveLogo';
 dotenv.config();
 
 const app = Fastify();
 
 app.register(cors, {
-  origin: 'http://localhost:5173',
+  origin: 'http://localhost:3000',
   methods: ['PUT', 'GET', 'POST', 'DELETE', 'OPTIONS']
 });
 
@@ -28,12 +29,14 @@ const connection = new PgPromiseAdapter();
 app.register(routes, connection);
 
 //app.register(routesCustomer);
-//pgPromiseAdapter.executeScript('../database/create.sql');
+connection.executeScript('../database/create.sql');
+//connection.query(createSql, []).catch(console.error);
 
 const launchRepository = new LaunchRepositoryDatabase(connection);
 const savePhoto = new SavePhoto(launchRepository);
+const saveLogo = new SaveLogo(launchRepository);
 
-app.post('/photos/:launch_id', { preHandler: multerConfig.single('file') },
+app.post('/photo/:launch_id', { preHandler: multerConfig.single('file') },
   async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const photo = request.file as MyFile;
@@ -44,6 +47,27 @@ app.post('/photos/:launch_id', { preHandler: multerConfig.single('file') },
         }
       });
       const { photoId } = await savePhoto.execute(launch_id, result.url);
+      reply.code(201).send({
+        result,
+        photoId,
+        message: 'Imagem salva com sucesso!'
+      });
+    } catch (error) {
+      reply.code(500).send(error);
+    }
+  });
+
+app.post('/logo/:business_id', { preHandler: multerConfig.single('file') },
+  async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const photo = request.file as MyFile;
+      const { business_id } = request.params as { business_id: string };
+      const result = await cloudinary.uploader.upload(photo.path, { folder: 'minha-oficina' }, async (err, result) => {
+        if (err) {
+          console.log('error cloud', err);
+        }
+      });
+      const { photoId } = await saveLogo.execute(business_id, result.url);
       reply.code(201).send({
         result,
         photoId,

@@ -38,4 +38,12 @@ CREATE TABLE IF NOT EXISTS photos (
   CONSTRAINT fk_launchs FOREIGN KEY(launch_id) REFERENCES launchs(launch_id)  
 );
 
+CREATE TABLE IF NOT EXISTS logos (
+  photo_id TEXT PRIMARY KEY,
+  business_id TEXT,
+  url TEXT,
+  
+  CONSTRAINT fk_business FOREIGN KEY(business_id) REFERENCES business(business_id)  
+);
+
 

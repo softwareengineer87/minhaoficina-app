@@ -13,7 +13,6 @@ class Business {
     readonly name: string,
     email: string,
     password: string,
-    readonly logo: string
   ) {
     if (name === '') {
       throw new Error('O nome é obrigatório.');
@@ -32,7 +31,6 @@ class Business {
     name: string,
     email: string,
     password: string,
-    logo: string
   ) {
     const businessId = uuidv4();
     return new Business(
@@ -40,7 +38,6 @@ class Business {
       name,
       email,
       password,
-      logo
     );
   }
 
@@ -49,7 +46,6 @@ class Business {
       businessId: this.businessId,
       name: this.name,
       email: this.email.getValue(),
-      logo: this.logo
     }
     const token = sign(payload, 'webdesign', { algorithm: 'HS256' });
     return token;

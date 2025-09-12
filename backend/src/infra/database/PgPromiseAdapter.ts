@@ -11,7 +11,14 @@ class PgPromiseAdapter implements DatabaseConnection {
   connection: any;
 
   constructor() {
-    this.connection = pgp()('postgressql://postgres:webdesign@localhost:5433/minhaoficina_db');
+    const host = process.env.POSTGRES_HOST || 'localhost';
+    const user = process.env.POSTGRES_USER || 'postgres';
+    const password = process.env.POSTGRES_PASSWORD || 'webdesign';
+    const database = process.env.POSTGRES_DB || 'minhaoficina_db';
+    const port = process.env.POSTGRES_PORT || '5432';
+
+    const connectionString = `postgresql://${user}:${password}@${host}:${port}/${database}`;
+    this.connection = pgp()(connectionString);
   }
 
   async query(statement: string, params: any) {

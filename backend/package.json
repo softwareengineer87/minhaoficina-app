@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "tsx --watch src/infra/fastify/server.ts",
     "start": "tsx --watch src/infra/fastify/server.ts",
+    "build": "tsup ./src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -35,6 +36,7 @@
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.16.3",
     "pg-promise": "^11.13.0",
+    "tsup": "^8.5.0",
     "tsx": "^4.19.4",
     "uuid": "^11.1.0"
   }

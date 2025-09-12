@@ -1,0 +1,12 @@
+.launch-container .launch {
+  display: flex;
+  gap: 1rem;
+}
+
+.launch .box-form {
+  flex: 1;
+}
+
+.launch .box-pdf {
+  margin-right: 2%;
+}

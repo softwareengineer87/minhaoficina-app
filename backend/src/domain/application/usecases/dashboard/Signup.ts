@@ -10,7 +10,6 @@ class Signup {
       input.name,
       input.email,
       input.password,
-      input.logo
     );
     const hashPass = await business.password.emcryptPassword(input.password);
     await this.launchRepository.saveBusiness(
@@ -18,7 +17,6 @@ class Signup {
       business.name,
       business.getEmail(),
       hashPass,
-      business.logo
     );
 
     return {
@@ -32,7 +30,6 @@ type Input = {
   name: string;
   email: string;
   password: string;
-  logo: string;
 }
 
 type Output = {

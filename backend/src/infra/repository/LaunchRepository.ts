@@ -10,12 +10,12 @@ interface LaunchRepository {
     name: string,
     email: string,
     password: string,
-    logo: string
   ): Promise<void>;
   getByEmail(email: string): Promise<Business | null>;
   saveLaunch(launch: Launch): Promise<void>;
   businessDetail(businessId: string): Promise<Business>;
   savePhoto(photoId: string, launchId: string, url: string): Promise<void>;
+  saveLogo(photoId: string, businessId: string, url: string): Promise<void>;
   savePart(part: Part): Promise<void>;
 }
 
@@ -28,12 +28,11 @@ class LaunchRepositoryDatabase implements LaunchRepository {
     name: string,
     email: string,
     password: string,
-    logo: string
   ): Promise<void> {
     await this.connection.query(`INSERT INTO business
-    (business_id, name, email, password, logo) 
-    VALUES($1,$2,$3,$4,$5)`, [
-      businessId, name, email, password, logo
+    (business_id, name, email, password) 
+    VALUES($1, $2, $3, $4)`, [
+      businessId, name, email, password
     ]);
   }
 
@@ -42,7 +41,7 @@ class LaunchRepositoryDatabase implements LaunchRepository {
     WHERE email = $1`, [email]);
     if (businessData) {
       return new Business(businessData.business_id, businessData.name,
-        businessData.email, businessData.password, businessData.logo);
+        businessData.email, businessData.password);
     }
 
     return null;
@@ -71,14 +70,17 @@ class LaunchRepositoryDatabase implements LaunchRepository {
     WHERE business_id = $1`, [businessId]);
 
     return new Business(businessData.business_id, businessData.name,
-      businessData.email, businessData.password, businessData.city,
-      businessData.district, businessData.address_number,
-      businessData.description, businessData.logo);
+      businessData.email, businessData.password);
   }
 
   async savePhoto(photoId: string, launchId: string, url: string): Promise<void> {
     await this.connection.query(`INSERT INTO photos
     (photo_id, launch_id, url) VALUES ($1, $2, $3)`, [photoId, launchId, url]);
+  }
+
+  async saveLogo(photoId: string, businessId: string, url: string): Promise<void> {
+    await this.connection.query(`INSERT INTO logos
+    (photo_id, business_id, url) VALUES ($1, $2, $3)`, [photoId, businessId, url]);
   }
 
   async savePart(part: Part): Promise<void> {
